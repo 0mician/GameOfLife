@@ -1,0 +1,4 @@
+* GameOfLife
+This repo may end up (that's the original idea) containing multiple
+implementations in different programming languages of [[https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life][Conway's game of
+life]]
