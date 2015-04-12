@@ -1,23 +1,38 @@
 function gol(width, height)
     universe = randi([0 1],width, height);
     updateduniverse = universe;
-    while (1)
-       display(updateduniverse, width, height);
-       updateduniverse = update(universe, width, height);
-       pause(0.2);
+    h = createdisplay(universe, width, height);
+    while(1)
+        updateduniverse = update(universe, updateduniverse, width, height);
+        pause(1);
+        set(h,'UserData',updateduniverse);
+        drawnow
     end
 end
 
-function display(universe, width, height)
-    imagesc((1:width)+0.5,(1:height)+0.5,universe);
-    colormap(gray)
-    axis equal
+function h = createdisplay(universe, width, height)
+    map2 = [ 0 0 0; 1 1 1];
+    colormap(map2);
+    h = pcolor(universe);
 end
 
-function updateduniverse = update(universe, width, height)
+function n = computeNeighbors(universe, i, j)
+    n = universe(i-1,j-1) + universe(i-1,j) + universe(i-1,j+1) + universe(i,j-1) + universe(i,j+1) + universe(i+1,j-1) + universe(i+1,j) + universe(i+1,j+1);
+end
+
+function updateduniverse = update(universe, updateduniverse, width, height)
     for i=2:height-1
         for j=2:width-1
-        % todo
+            n = computeNeighbors(universe,i,j);
+            if(n <= 1)
+                updateduniverse(i,j) = 0;
+            elseif(universe(i,j) == 1 && ( n == 2 || n == 3 ))
+                updateduniverse(i,j) = 1;
+            elseif(universe(i,j) == 0 && n == 3 )
+                updateduniverse(i,j) = 1;
+            elseif(n >= 4)
+                updateduniverse(i,j) = 0;
+            end
         end
     end
 end
